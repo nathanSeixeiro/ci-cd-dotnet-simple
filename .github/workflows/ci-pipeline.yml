@@ -15,5 +15,11 @@ jobs:
     runs-on: windows-latest
 
     steps:
-    - name: Echo
-      run: echo "pipeline ci"
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore
