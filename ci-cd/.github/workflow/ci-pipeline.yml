@@ -12,8 +12,8 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - name: Echo
-      run: echo "Hello World"
+      run: echo "pipeline ci"
