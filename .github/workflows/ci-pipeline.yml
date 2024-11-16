@@ -14,3 +14,7 @@ jobs:
       run: dotnet restore ci-cd/ci-cd.csproj
     - name: Build
       run: dotnet build --no-restore ci-cd/ci-cd.csproj
+    - name: Test
+    #   run: dotnet test --no-restore ci-cd/ci-cd.csproj
+    # - name: Publish
+      run: dotnet publish --no-restore ci-cd/ci-cd.csproj --self-contained --Property:PublishDir=publish --configuration Release
