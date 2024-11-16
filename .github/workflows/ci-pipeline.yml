@@ -11,6 +11,6 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v3
     - name: Restore dependencies
-      run: dotnet restore dotnet-dio/ci-cd/ci-cd.csproj
+      run: dotnet restore ci-cd/ci-cd.csproj
     - name: Build
-      run: dotnet build --no-restore dotnet-dio/ci-cd/ci-cd.csproj
+      run: dotnet build --no-restore ci-cd/ci-cd.csproj
