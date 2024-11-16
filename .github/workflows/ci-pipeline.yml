@@ -17,4 +17,4 @@ jobs:
     # - name: Test
     #   run: dotnet test --no-restore ci-cd/ci-cd.csproj
     - name: Publish
-      run: dotnet publish --no-restore ci-cd/ci-cd.csproj--Property:PublishDir=publish --configuration Release
+      run: dotnet publish --no-restore ci-cd/ci-cd.csproj --Property:PublishDir=publish --configuration Release
