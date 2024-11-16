@@ -18,3 +18,9 @@ jobs:
     #   run: dotnet test --no-restore ci-cd/ci-cd.csproj
     - name: Publish
       run: dotnet publish --no-restore ci-cd/ci-cd.csproj --Property:PublishDir=publish --configuration Release
+
+    - name: archive artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: ci-cd
+        path: ci-cd/publish 
