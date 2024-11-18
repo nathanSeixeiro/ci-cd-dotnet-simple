@@ -36,6 +36,6 @@ jobs:
       with:
         projectBaseDir: ci-cd
         args: >
-          -Dsonar.projectKey=nathanSeixeiro_ci-cd-dotnet-simple
+          # -Dsonar.projectKey=nathanSeixeiro_ci-cd-dotnet-simple
           -Dsonar.organization=nathanseixeiro
           -Dsonar.host.url=https://sonarcloud.io/project/information?id=nathanSeixeiro_ci-cd-dotnet-simple
