@@ -2,40 +2,59 @@ name: ci-pipeline
 
 on:
   push:
-    branches: [ "main" ]
+    branches: ["main"]
   pull_request:
-    branches: [ "main" ]
+    branches: ["main"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      uses: actions/checkout@v3
-    - name: Restore dependencies
-      run: dotnet restore ci-cd/ci-cd.csproj
-    - name: Build
-      run: dotnet build --no-restore ci-cd/ci-cd.csproj
-    # - name: Test
-    #   run: dotnet test --no-restore ci-cd/ci-cd.csproj
-    - name: Publish
-      run: dotnet publish --no-restore ci-cd/ci-cd.csproj --Property:PublishDir=publish --configuration Release
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Restore dependencies
+        run: dotnet restore ci-cd/ci-cd.csproj
+      - name: Build
+        run: dotnet build --no-restore ci-cd/ci-cd.csproj
+      # - name: Test
+      #   run: dotnet test --no-restore ci-cd/ci-cd.csproj
+      - name: Publish
+        run: dotnet publish --no-restore ci-cd/ci-cd.csproj --Property:PublishDir=publish --configuration Release
 
-    - name: archive artifacts
-      uses: actions/upload-artifact@v3
-      with:
-        name: ci-cd
-        path: ci-cd/publish
+      - name: archive artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: ci-cd
+          path: ci-cd/publish
 
   check:
     runs-on: ubuntu-latest
     needs: build
     steps:
-    - name: sonarCloud scan
-      uses: sonarsource/sonarcloud-github-action@master
-      with:
-        projectBaseDir: ci-cd
-        args: >
-          # -Dsonar.projectKey=nathanSeixeiro_ci-cd-dotnet-simple
-          -Dsonar.organization=nathanseixeiro
-          -Dsonar.host.url=https://sonarcloud.io/project/information?id=nathanSeixeiro_ci-cd-dotnet-simple
+      - name: sonarCloud scan
+        uses: sonarsource/sonarcloud-github-action@master
+        with:
+          projectBaseDir: ci-cd
+          args: >
+            # -Dsonar.projectKey=nathanSeixeiro_ci-cd-dotnet-simple
+            -Dsonar.organization=nathanseixeiro
+            -Dsonar.host.url=https://sonarcloud.io/project/information?id=nathanSeixeiro_ci-cd-dotnet-simple
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: ci-cd
+          path: ./publish
+      - name: Azure Web App Deploy
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: smelless
+          slot-name: production
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: ./publish
